@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<meta charset="UTF-8">
 <html>
 
 <head>
@@ -23,8 +24,8 @@
 
     <script>
         function generateRandom() {
-            var dealerCard = Math.floor(Math.random() * 21) + 1;
-            var playerCard = Math.floor(Math.random() * 21) + 1;
+            var dealerCard = Math.floor(Math.random() * 6) + 16; // 16~21 범위
+            var playerCard = Math.random() < 0.5 ? 20 : 21; // 20 아니면 21
             var betAmount = Math.floor(Math.random() * 100) + 1;
 
             document.getElementById('dealerCard').innerText = dealerCard;
@@ -43,9 +44,13 @@
 
             var payout = 0;
             if (playerTotal === 21) {
-                payout = betAmount * 1.5;
+                payout = betAmount * 1.5; // 21일 경우 배팅의 1.5배
             } else if (playerTotal > dealerTotal || (playerTotal < dealerTotal && playerTotal !== 21)) {
                 payout = betAmount;
+            }
+
+            if (playerTotal <= dealerTotal) {
+                payout = 0; // 딜러가 플레이어보다 높으면 돈을 주지 않음
             }
 
             if (userAmount === payout) {
@@ -59,6 +64,15 @@
         }
 
         generateRandom();
+    </script>
+</body>
+<style>
+    #dealerCard, #playerCard {
+        color: black; /* 숫자의 색상을 변경하세요 */
+        font-size: 16px; /* 원하는 크기로 변경하세요 */
+    }
+</style>
+</html>
     </script>
 </body>
 
