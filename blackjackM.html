@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+
+<head>
+    <title>블랙잭 딜러 상황</title>
+</head>
+
+<body>
+    <h1>블랙잭 딜러 상황</h1>
+
+    <div>
+        <p>딜러 카드 숫자: <span id="dealerCard"></span></p>
+        <p>플레이어 카드 숫자: <span id="playerCard"></span></p>
+        <p>플레이어가 <span id="betAmount"></span>만원을 배팅했을 때,</p>
+        <p>딜러가 플레이어에게 줘야 할 금액은?</p>
+    </div>
+
+    <input type="text" id="userAnswer" placeholder="금액 입력">
+    <button onclick="checkPayout()">정답 확인</button>
+    <p id="result"></p>
+    <p id="status"></p>
+    <button onclick="generateRandom()">다음 문제</button>
+
+    <script>
+        function generateRandom() {
+            var dealerCard = Math.floor(Math.random() * 6) + 16; // 16~21 범위
+            var playerCard = 21; // 플레이어 카드를 무조건 21로 설정
+            var betAmount = Math.floor(Math.random() * 100) + 1;
+
+            document.getElementById('dealerCard').innerText = dealerCard;
+            document.getElementById('playerCard').innerText = playerCard;
+            document.getElementById('betAmount').innerText = betAmount;
+            document.getElementById('userAnswer').value = '';
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('status').innerHTML = '';
+        }
+
+        function checkPayout() {
+            var userAmount = parseFloat(document.getElementById('userAnswer').value);
+            var dealerTotal = parseInt(document.getElementById('dealerCard').innerText);
+            var playerTotal = parseInt(document.getElementById('playerCard').innerText);
+            var betAmount = parseInt(document.getElementById('betAmount').innerText);
+
+            var payout = 0;
+            if (playerTotal === 21) {
+                payout = betAmount * 1.5; // 21일 경우 배팅의 1.5배
+            } else if (playerTotal > dealerTotal || (playerTotal < dealerTotal && playerTotal !== 21)) {
+                payout = betAmount;
+            }
+
+            if (playerTotal <= dealerTotal) {
+                payout = 0; // 딜러가 플레이어보다 높으면 돈을 주지 않음
+            }
+
+            if (userAmount === payout) {
+                document.getElementById('status').innerHTML = '정답입니다!';
+                document.getElementById('status').style.color = 'green';
+            } else {
+                document.getElementById('status').innerHTML = '틀렸습니다.';
+                document.getElementById('status').style.color = 'red';
+                document.getElementById('result').innerHTML = '딜러가 지불해야 할 금액은 ' + payout + '만원';
+            }
+        }
+
+        generateRandom();
+    </script>
+</body>
+<style>
+    #dealerCard, #playerCard {
+        color: black; /* 숫자의 색상을 변경하세요 */
+        font-size: 16px; /* 원하는 크기로 변경하세요 */
+    }
+</style>
+</html>
